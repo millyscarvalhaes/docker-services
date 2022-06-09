@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+
+  api:
+    container_name: "api"
+    build:
+      context: ./
+      dockerfile: Docker-java-remote
+    environment:
+      PROFILE: "dev"
+      JVM_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx1G -Xms128m -XX:MaxMetaspaceSize=128m"
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    depends_on:
+      - postgres
+    networks:
+      - container
+
+networks:
+  container:
+    driver: bridge
